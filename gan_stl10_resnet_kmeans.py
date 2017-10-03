@@ -134,9 +134,9 @@ class splitting_stl10:
 
     def recalc_labels(self, session, formula, iteration):
         all_features = np.zeros((100000, DIM_D))
-
+        normformula = tf.nn.l2_normalize(formula, 0)
         for i, (images, _labs) in enumerate(self.train_ordered()):
-            features = session.run(tf.nn.l2_normalize(formula, 0), feed_dict={all_real_data_int: images, all_real_labels:_labs, _iteration:iteration})
+            features = session.run(normformula, feed_dict={all_real_data_int: images, all_real_labels:_labs, _iteration:iteration})
             all_features[(i * BATCH_SIZE):((i + 1) * BATCH_SIZE), :] = features
 
         np.savetxt("labels_prev_%d.txt"%iteration, self.alt_labels)
